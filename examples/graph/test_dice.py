@@ -25,7 +25,7 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
-data = Dataset(root='/tmp/', name=args.dataset)
+data = Dataset(root='/tmp/', name=args.dataset, setting='gcn')
 adj, features, labels = data.adj, data.features, data.labels
 idx_train, idx_val, idx_test = data.idx_train, data.idx_val, data.idx_test
 idx_unlabeled = np.union1d(idx_val, idx_test)

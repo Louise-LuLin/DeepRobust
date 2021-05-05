@@ -5,5 +5,17 @@ from .random_attack import Random
 from .topology_attack import MinMax, PGDAttack
 from .node_embedding_attack import NodeEmbeddingAttack, OtherNodeEmbeddingAttack
 from .nipa import NIPA
+from .spectral_attack import SpectralAttack, MinMaxSpectral
 
-__all__ = ['BaseAttack', 'DICE', 'MetaApprox', 'Metattack', 'Random', 'MinMax', 'PGDAttack', 'NIPA', 'NodeEmbeddingAttack', 'OtherNodeEmbeddingAttack']
+__all__ = ['BaseAttack', 
+           'DICE', 
+           'MetaApprox', 
+           'Metattack', 
+           'Random', 
+           'MinMax', 
+           'PGDAttack', 
+           'NIPA', 
+           'NodeEmbeddingAttack', 
+           'OtherNodeEmbeddingAttack',
+           'SpectralAttack',
+           'MinMaxSpectral']

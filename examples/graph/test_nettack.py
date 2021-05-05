@@ -189,7 +189,7 @@ def multi_test_evasion():
 
 if __name__ == '__main__':
     main()
-    multi_test_poison()
-    multi_test_evasion()
+    # multi_test_poison()
+    # multi_test_evasion()
 
 

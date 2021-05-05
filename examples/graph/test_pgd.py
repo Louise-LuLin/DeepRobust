@@ -28,13 +28,15 @@ parser.add_argument('--model', type=str, default='PGD', choices=['PGD', 'min-max
 args = parser.parse_args()
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print (device)
+torch.set_num_threads(1)
 
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 if device != 'cpu':
     torch.cuda.manual_seed(args.seed)
 
-data = Dataset(root='/tmp/', name=args.dataset, setting='nettack')
+data = Dataset(root='/tmp/', name=args.dataset, setting='gcn')
 adj, features, labels = data.adj, data.features, data.labels
 # features = normalize_feature(features)
 
