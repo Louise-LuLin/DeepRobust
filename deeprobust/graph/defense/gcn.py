@@ -135,7 +135,9 @@ class GCN(nn.Module):
         self.gc1.reset_parameters()
         self.gc2.reset_parameters()
 
-    def fit(self, features, adj, labels, idx_train, idx_val=None, train_iters=200, initialize=True, verbose=False, normalize=True, patience=500, **kwargs):
+    def fit(self, features, adj, labels, idx_train, idx_val=None, 
+            train_iters=200, initialize=True, verbose=False, normalize=True, 
+            patience=500, **kwargs):
         """Train the gcn model, when idx_val is not None, pick the best model according to the validation loss.
 
         Parameters
@@ -173,11 +175,12 @@ class GCN(nn.Module):
             adj = adj.to(self.device)
             labels = labels.to(self.device)
 
-        if normalize:
+        self.normalize = normalize
+        if self.normalize:
             if utils.is_sparse_tensor(adj):
-                adj_norm = utils.normalize_adj_tensor(adj, sparse=True)
+                adj_norm = utils.normalize_adj_tensor(adj, sparse=True, device=self.device)
             else:
-                adj_norm = utils.normalize_adj_tensor(adj)
+                adj_norm = utils.normalize_adj_tensor(adj, device=self.device)
         else:
             adj_norm = adj
 
@@ -309,6 +312,16 @@ class GCN(nn.Module):
               "accuracy= {:.4f}".format(acc_test.item()))
         return acc_test.item()
 
+    def test_reset_graph(self, idx_test, features=None, adj=None):
+        self.eval()
+        output = self.predict(features, adj)
+        # output = self.output
+        loss_test = F.nll_loss(output[idx_test], self.labels[idx_test])
+        acc_test = utils.accuracy(output[idx_test], self.labels[idx_test])
+        print("Test set results:",
+              "loss= {:.4f}".format(loss_test.item()),
+              "accuracy= {:.4f}".format(acc_test.item()))
+        return acc_test.item()
 
     def predict(self, features=None, adj=None):
         """By default, the inputs should be unnormalized adjacency
@@ -334,11 +347,12 @@ class GCN(nn.Module):
             if type(adj) is not torch.Tensor:
                 features, adj = utils.to_tensor(features, adj, device=self.device)
 
-            self.features = features
+            self.features = features.to(self.device)
+            adj = adj.to(self.device)
             if utils.is_sparse_tensor(adj):
-                self.adj_norm = utils.normalize_adj_tensor(adj, sparse=True)
+                self.adj_norm = utils.normalize_adj_tensor(adj, sparse=True, device=self.device)
             else:
-                self.adj_norm = utils.normalize_adj_tensor(adj)
+                self.adj_norm = utils.normalize_adj_tensor(adj, device=self.device)
             return self.forward(self.features, self.adj_norm)
 
 
