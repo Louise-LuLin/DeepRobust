@@ -165,9 +165,9 @@ class Node2Vec(BaseEmbedding):
 
         walks = sample_n2v_random_walks(adj, walk_length, walks_per_node, p=p, q=q)
         walks = [list(map(str, walk)) for walk in walks]
-        self.model = Word2Vec(walks, size=embedding_dim, window=window_size, min_count=0, sg=1, workers=workers,
-                         iter=1, negative=num_neg_samples, hs=0, compute_loss=True)
-        self.embedding = self.model.wv.vectors[np.fromiter(map(int, self.model.wv.index2word), np.int32).argsort()]
+        self.model = Word2Vec(walks, vector_size=embedding_dim, window=window_size, min_count=0, sg=1, workers=workers,
+                         negative=num_neg_samples, hs=0, compute_loss=True)
+        self.embedding = self.model.wv.vectors[np.fromiter(map(int, self.model.wv.index_to_key), np.int32).argsort()]
 
 
 
@@ -233,9 +233,9 @@ class DeepWalk(BaseEmbedding):
 
         walks = sample_random_walks(adj, walk_length, walks_per_node)
         walks = [list(map(str, walk)) for walk in walks]
-        self.model = Word2Vec(walks, size=embedding_dim, window=window_size, min_count=0, sg=1, workers=workers,
-                         iter=1, negative=num_neg_samples, hs=0, compute_loss=True)
-        self.embedding = self.model.wv.vectors[np.fromiter(map(int, self.model.wv.index2word), np.int32).argsort()]
+        self.model = Word2Vec(walks, vector_size=embedding_dim, window=window_size, min_count=0, sg=1, workers=workers,
+                         negative=num_neg_samples, hs=0, compute_loss=True)
+        self.embedding = self.model.wv.vectors[np.fromiter(map(int, self.model.wv.index_to_key), np.int32).argsort()]
 
 
     def deepwalk_svd(self, adj, window_size=10, embedding_dim=64, num_neg_samples=1, sparse=True):

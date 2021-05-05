@@ -312,17 +312,6 @@ class GCN(nn.Module):
               "accuracy= {:.4f}".format(acc_test.item()))
         return acc_test.item()
 
-    def test_reset_graph(self, idx_test, features=None, adj=None):
-        self.eval()
-        output = self.predict(features, adj)
-        # output = self.output
-        loss_test = F.nll_loss(output[idx_test], self.labels[idx_test])
-        acc_test = utils.accuracy(output[idx_test], self.labels[idx_test])
-        print("Test set results:",
-              "loss= {:.4f}".format(loss_test.item()),
-              "accuracy= {:.4f}".format(acc_test.item()))
-        return acc_test.item()
-
     def predict(self, features=None, adj=None):
         """By default, the inputs should be unnormalized adjacency
 
